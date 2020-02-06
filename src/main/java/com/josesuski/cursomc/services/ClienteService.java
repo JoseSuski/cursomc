@@ -1,6 +1,5 @@
 package com.josesuski.cursomc.services;
 
-import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +15,7 @@ public class ClienteService {
 	@Autowired
 	private ClienteRepository repo;
 	
-	public Optional<Cliente> buscar(Integer id) {
+	public Optional<Cliente> find(Integer id) {
 		Optional<Cliente> obj = repo.findById(id);
 		if(obj == null) {
 			throw new ObjectNoFoundException("Objeto não encontrado! Id: "+ id+" tipo: "+Cliente.class.getName());
