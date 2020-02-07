@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.josesuski.cursomc.domain.Pedido;
 import com.josesuski.cursomc.repositories.PedidoRepository;
-import com.josesuski.cursomc.services.exceptions.ObjectNoFoundException;
+import com.josesuski.cursomc.services.exceptions.ObjectNotFoundException;
 
 @Service
 public class PedidoService {
@@ -18,7 +18,7 @@ public class PedidoService {
 	public Optional<Pedido> find(Integer id) {
 		Optional<Pedido> obj = repo.findById(id);
 		if(obj == null) {
-			throw new ObjectNoFoundException("Objeto não encontrado! Id: " + id + " tipo: " + Pedido.class.getName());
+			throw new ObjectNotFoundException("Objeto não encontrado! Id: " + id + " tipo: " + Pedido.class.getName());
 		}
 		return obj;
 	}

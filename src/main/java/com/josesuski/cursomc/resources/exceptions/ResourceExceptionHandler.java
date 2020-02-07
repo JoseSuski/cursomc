@@ -1,7 +1,7 @@
 package com.josesuski.cursomc.resources.exceptions;
 
 import com.josesuski.cursomc.services.exceptions.DataIntegrityException;
-import com.josesuski.cursomc.services.exceptions.ObjectNoFoundException;
+import com.josesuski.cursomc.services.exceptions.ObjectNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -14,8 +14,8 @@ import javax.servlet.http.HttpServletRequest;
 @ControllerAdvice
 public class ResourceExceptionHandler {
 
-	@ExceptionHandler(ObjectNoFoundException.class)
-	public ResponseEntity<StandardError> objectNotFound(ObjectNoFoundException e, HttpServletRequest request){
+	@ExceptionHandler(ObjectNotFoundException.class)
+	public ResponseEntity<StandardError> objectNotFound(ObjectNotFoundException e, HttpServletRequest request){
 	
 	StandardError err = new StandardError(HttpStatus.NOT_FOUND.value(),e.getMessage() , System.currentTimeMillis());
 	

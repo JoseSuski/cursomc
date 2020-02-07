@@ -14,63 +14,62 @@ import com.josesuski.cursomc.domain.Categoria;
 import com.josesuski.cursomc.dto.CategoriaDTO;
 import com.josesuski.cursomc.repositories.CategoriaRepository;
 import com.josesuski.cursomc.services.exceptions.DataIntegrityException;
-import com.josesuski.cursomc.services.exceptions.ObjectNoFoundException;
+import com.josesuski.cursomc.services.exceptions.ObjectNotFoundException;
 
 @Service
 public class CategoriaService {
 
-	@Autowired
-	private CategoriaRepository repo;
+    @Autowired
+    private CategoriaRepository repo;
 
-	public Optional<Categoria> find(Integer id) {
-		Optional<Categoria> obj = repo.findById(id);
+    public Optional<Categoria> find(Integer id) {
+        Optional<Categoria> obj = repo.findById(id);
 
-		if (!obj.isPresent()) {
-			throw new ObjectNoFoundException(
-					"Objeto não encontrado! Id: " + id + " tipo: " + Categoria.class.getName());
-		}
-		return obj;
-	}
+        if (!obj.isPresent()) {
+            throw new ObjectNotFoundException(
+                    "Objeto não encontrado! Id: " + id + " tipo: " + Categoria.class.getName());
+        }
+        return obj;
+    }
 
-	public Categoria insert(Categoria obj) {
-		obj.setId(null);
-		return repo.save(obj);
+    public Categoria insert(Categoria obj) {
+        obj.setId(null);
+        return repo.save(obj);
 
-	}
+    }
 
-	public Categoria update(Categoria obj) {
-		find(obj.getId());
-		return repo.save(obj);
+    public Categoria update(Categoria obj) {
+        find(obj.getId());
+        return repo.save(obj);
+    }
 
-	}
+    public void delete(Integer id) {
 
-	public void delete(Integer id) {
+        find(id);
 
-		find(id);
+        try {
+            repo.deleteById(id);
+        } catch (DataIntegrityViolationException e) {
+            throw new DataIntegrityException("Não é possível excluir uma categoria com produtos");
+        }
 
-		try {
-			repo.deleteById(id);
-		} catch (DataIntegrityViolationException e) {
-			throw new DataIntegrityException("Não é possível excluir uma categoria com produtos");
-		}
+    }
 
-	}
+    public List<Categoria> findAll() {
 
-	public List<Categoria> findAll() {
+        return repo.findAll();
+    }
 
-		return repo.findAll();
-	}
+    public Page<Categoria> findPage(Integer page, Integer linesPerPage, String orderBy, String direction) {
 
-	public Page<Categoria> findPage(Integer page, Integer linesPerPage, String orderBy, String direction) {
+        PageRequest pageRequest = PageRequest.of(page, linesPerPage, Direction.valueOf(direction), orderBy);
 
-		PageRequest pageRequest = PageRequest.of(page, linesPerPage, Direction.valueOf(direction), orderBy);
+        return repo.findAll(pageRequest);
 
-		return repo.findAll(pageRequest);
+    }
 
-	}
-
-	public Categoria fromDTO(CategoriaDTO objDto) {
-		return new Categoria(objDto.getId(), objDto.getNome());
-	}
+    public Categoria fromDTO(CategoriaDTO objDto) {
+        return new Categoria(objDto.getId(), objDto.getNome());
+    }
 
 }
