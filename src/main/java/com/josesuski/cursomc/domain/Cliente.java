@@ -19,7 +19,9 @@ public class Cliente implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
-	private String nome, email, cpfOuCnpj;
+	private String nome, cpfOuCnpj;
+	@Column(unique = true)
+	private  String email;
 	private Integer tipo;
 
 	@OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL)
