@@ -33,7 +33,7 @@ public class DBService {
     @Autowired
     private ItemPedidoRepository itemPedidoRepository;
 
-    public void instatiateTestDatabase() throws ParseException {
+    public void instantiateTestDatabase() throws ParseException {
         Categoria cat1 = new Categoria(null, "Informática");
         Categoria cat2 = new Categoria(null, "Escritório");
         Categoria cat3 = new Categoria(null, "Cama, Mesa e banho");

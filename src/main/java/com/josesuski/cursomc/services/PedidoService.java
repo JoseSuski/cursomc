@@ -15,6 +15,7 @@ import com.josesuski.cursomc.repositories.ItemPedidoRepository;
 import com.josesuski.cursomc.repositories.PagamentoRepository;
 import com.josesuski.cursomc.repositories.PedidoRepository;
 import com.josesuski.cursomc.services.exceptions.ObjectNotFoundException;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class PedidoService {
@@ -29,6 +30,8 @@ public class PedidoService {
     private ItemPedidoRepository itemPedidoRepository;
     @Autowired
     private ProdutoService produtoService;
+    @Autowired
+    private ClienteService clienteService;
 
     public Pedido find(Integer id) {
         Optional<Pedido> obj = repo.findById(id);
@@ -36,9 +39,11 @@ public class PedidoService {
                 "Objeto não encontrado! Id: " + id + ", Tipo: " + Pedido.class.getName()));
     }
 
+    @Transactional
     public Pedido insert(Pedido obj) {
         obj.setId(null);
         obj.setInstante(new Date());
+        obj.setCliente(clienteService.find(obj.getCliente().getId()));
         obj.getPagamento().setEstado(EstadoPagamento.PENDENTE);
         obj.getPagamento().setPedido(obj);
         if (obj.getPagamento() instanceof PagamentoComBoleto) {
@@ -49,13 +54,13 @@ public class PedidoService {
         pagamentoRepository.save(obj.getPagamento());
         for (ItemPedido ip : obj.getItens()) {
             ip.setDesconto(0.0);
-			Optional<Produto> p = produtoService.find(ip.getProduto().getId());
-
-			ip.setPreco(p.get().getPreco());
+            ip.setProduto(produtoService.find(ip.getProduto().getId()));
+            ip.setPreco(ip.getProduto().getPreco());
 
 			ip.setPedido(obj);
         }
         itemPedidoRepository.saveAll(obj.getItens());
+        System.out.println(obj);
         return obj;
     }
 }
