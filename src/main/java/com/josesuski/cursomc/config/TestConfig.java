@@ -10,8 +10,6 @@ import org.springframework.context.annotation.Profile;
 
 import java.text.ParseException;
 
-import com.josesuski.cursomc.services.DBService;
-
 @Configuration
 @Profile("test")
 public class TestConfig {

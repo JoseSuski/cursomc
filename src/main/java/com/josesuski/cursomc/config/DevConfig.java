@@ -2,6 +2,8 @@ package com.josesuski.cursomc.config;
 
 import java.text.ParseException;
 
+import com.josesuski.cursomc.services.EmailService;
+import com.josesuski.cursomc.services.SmtpEmailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -12,7 +14,7 @@ import com.josesuski.cursomc.services.DBService;
 
 @Configuration
 @Profile("dev")
-public class DevConfig {
+    public class DevConfig {
 
     @Autowired
     private DBService dbService;
@@ -29,5 +31,10 @@ public class DevConfig {
 
         dbService.instantiateTestDatabase();
         return true;
+    }
+
+    @Bean
+    public EmailService emailService(){
+        return  new SmtpEmailService();
     }
 }
