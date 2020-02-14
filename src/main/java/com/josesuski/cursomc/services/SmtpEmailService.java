@@ -14,15 +14,16 @@ public class SmtpEmailService extends AbstractEmailService {
 
     @Autowired
     private MailSender mailSender;
-    @Autowired(required=true)
+
+    @Autowired
     private JavaMailSender javaMailSender;
 
     private static final Logger LOG = LoggerFactory.getLogger(SmtpEmailService.class);
 
     @Override
     public void sendEmail(SimpleMailMessage msg) {
-        LOG.info("Enviando email");
-       mailSender.send(msg);
+        LOG.info("Enviando email...");
+        mailSender.send(msg);
         LOG.info("Email enviado");
     }
 
